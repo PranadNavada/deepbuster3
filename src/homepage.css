@@ -1,0 +1,288 @@
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #000000;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-container {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    pointer-events: auto;
+    z-index: 100;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+.welcome-text {
+    font-size: 4rem;
+    margin-top: 25vh;
+    margin-bottom: auto;
+    color: #ffffff;
+    font-weight: 400;
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+.image-preview {
+    max-width: 900px;
+    position: relative;
+    z-index: 10;
+    width: 85%;
+    margin-top: 3vh;
+    margin-bottom: 15vh;
+}
+
+.image-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+}
+
+.image-preview img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    box-shadow: none;
+    border: none;
+}
+
+.delete-button {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: all 0.2s ease;
+    line-height: 1;
+    padding: 0;
+}
+
+.delete-button:hover {
+    background-color: rgba(255, 60, 60, 0.8);
+    border-color: rgba(255, 60, 60, 0.8);
+    transform: scale(1.1);
+}
+
+.file-type-label {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 12px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    backdrop-filter: blur(5px);
+}
+
+.audio-preview {
+    position: relative;
+    z-index: 10;
+    max-width: 600px;
+    width: 85%;
+    margin-top: 3vh;
+    margin-bottom: 15vh;
+}
+
+.audio-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.audio-icon {
+    font-size: 80px;
+    opacity: 0.8;
+}
+
+.audio-filename {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    word-break: break-word;
+}
+
+.upload-bar {
+    position: fixed;
+    bottom: 20px;
+    z-index: 100;
+    pointer-events: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 90vw;
+}
+
+.upload-main-button {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 8px 50px 8px 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 60px;
+    border: 1px solid rgba(255, 140, 0, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    min-width: 350px;
+    height: 56px;
+}
+
+.upload-main-button:hover {
+    background-color: rgba(255, 140, 0, 0.1);
+    border-color: rgba(255, 140, 0, 0.4);
+    padding: 16px 40px 16px 20px;
+    height: 88px;
+    box-shadow: 0 8px 32px 0 rgba(255, 140, 0, 0.2);
+}
+
+.upload-bar.has-preview .upload-main-button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    padding: 8px 50px 8px 8px;
+    height: 56px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.plus-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 140, 0, 0.15);
+    border: 1px solid rgba(255, 140, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.upload-main-button:hover .plus-circle {
+    width: 56px;
+    height: 56px;
+}
+
+.upload-bar.has-preview .upload-main-button:hover .plus-circle {
+    width: 40px;
+    height: 40px;
+}
+
+.plus-icon {
+    font-size: 24px;
+    font-weight: 300;
+    color: #ff8c00;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.upload-main-button:hover .plus-icon {
+    font-size: 32px;
+}
+
+.upload-bar.has-preview .upload-main-button:hover .plus-icon {
+    font-size: 24px;
+}
+
+.upload-text {
+    font-size: 18px;
+    font-weight: 400;
+    color: #ffffff;
+    flex-grow: 1;
+}
+
+.arrow-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 140, 0, 0.525);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.arrow-button:hover {
+    background-color: rgba(255, 140, 0, 0.1);
+    border-color: rgba(255, 140, 0, 0.76);
+    box-shadow: 0 8px 32px 0 rgba(255, 140, 0, 0.2);
+}
+
+.arrow-icon {
+    font-size: 24px;
+    color: #ff8c00;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-status {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 16px 32px;
+    background-color: rgba(52, 50, 50, 0.95);
+    border: 1px solid rgba(255, 140, 0, 0.5);
+    border-radius: 30px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
