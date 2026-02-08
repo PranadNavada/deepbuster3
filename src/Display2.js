@@ -1,14 +1,14 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './Display.css';
+import './Display2.css';
 import Particles from './Particles';
 
-const Display = () => {
+const Display2 = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const file = location.state?.file;
     
-    const [imageData, setImageData] = React.useState(null);
+    const [spectrogramData, setSpectrogramData] = React.useState(null);
     const [heatmapData, setHeatmapData] = React.useState(null);
     const [descriptionData, setDescriptionData] = React.useState([]);
     const [percentage, setPercentage] = React.useState(0);
@@ -16,17 +16,17 @@ const Display = () => {
 
     React.useEffect(() => {
         if (file) {
-            analyzeImage(file);
+            analyzeAudio(file);
         }
     }, [file]);
 
-    const analyzeImage = async (imageFile) => {
+    const analyzeAudio = async (audioFile) => {
         setLoading(true);
         try {
             const formData = new FormData();
-            formData.append('file', imageFile);
+            formData.append('file', audioFile);
             
-            const response = await fetch('http://localhost:8002/api/analyze', {
+            const response = await fetch('http://localhost:8000/analyze-audio', {
                 method: 'POST',
                 body: formData
             });
@@ -36,22 +36,13 @@ const Display = () => {
             }
             
             const data = await response.json();
-            console.log('Image API response:', data);
-            
-            const imageUrl = data.image_url 
-                ? `http://localhost:8002${data.image_url}` 
-                : data.image_base64 || null;
-            const heatmapUrl = data.heatmap_url 
-                ? `http://localhost:8002${data.heatmap_url}` 
-                : data.heatmap_base64 || null;
-            
-            setImageData(imageUrl);
-            setHeatmapData(heatmapUrl);
-            setDescriptionData(data.descriptions || data.regions || [data.prediction || 'No analysis available']);
-            setPercentage(Math.round(data.percentage || data.fake_probability * 100 || 0));
+            setSpectrogramData(data.spectrogram);
+            setHeatmapData(data.heatmap);
+            setDescriptionData(data.description || []);
+            setPercentage(data.percentage || 0);
         } catch (error) {
-            console.error('Error analyzing image:', error);
-            setDescriptionData(['Error: Could not connect to image analysis server. Make sure port 8002 is running.']);
+            console.error('Error analyzing audio:', error);
+            setDescriptionData(['Error: Could not connect to audio analysis server. Make sure port 8000 is running.']);
             setPercentage(0);
         } finally {
             setLoading(false);
@@ -63,7 +54,7 @@ const Display = () => {
     };
 
     return (
-        <div className="display-container">
+        <div className="display2-container">
             <Particles
                 particleColors={["#ffffff"]}
                 particleCount={200}
@@ -84,21 +75,21 @@ const Display = () => {
                 <span className="back-arrow">←</span>
             </button>
 
-            <div className="display-content">
+            <div className="display2-content">
                 {loading && (
                     <div className="loading-overlay">
-                        <div className="loading-spinner">Analyzing image...</div>
+                        <div className="loading-spinner">Analyzing audio...</div>
                     </div>
                 )}
                 
                 <div className="left-section">
-                    <div className="section-box image-box">
-                        <h2 className="section-title">Image</h2>
+                    <div className="section-box spectrogram-box">
+                        <h2 className="section-title">Spectrogram</h2>
                         <div className="content-area">
-                            {imageData ? (
-                                <img src={imageData} alt="Processed" className="display-image" />
+                            {spectrogramData ? (
+                                <img src={spectrogramData} alt="Spectrogram" className="content-image" />
                             ) : (
-                                <div className="placeholder-text">Image will appear here</div>
+                                <div className="placeholder-text">Spectrogram will appear here</div>
                             )}
                         </div>
                     </div>
@@ -110,9 +101,9 @@ const Display = () => {
                             <h2 className="section-title">Heat map</h2>
                             <div className="content-area">
                                 {heatmapData ? (
-                                    <img src={heatmapData} alt="Heatmap" className="heatmap-image" />
+                                    <img src={heatmapData} alt="Heat map" className="content-image" />
                                 ) : (
-                                    <div className="placeholder-text">Heatmap will appear here</div>
+                                    <div className="placeholder-text">Heat map will appear here</div>
                                 )}
                             </div>
                         </div>
@@ -178,4 +169,4 @@ const Display = () => {
     );
 };
 
-export default Display;
+export default Display2;

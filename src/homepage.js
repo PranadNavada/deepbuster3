@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
 import './homepage.css';
 import TextType from './TextType';
-import { uploadFileToFirebase } from './firebaseService';
 import Particles from './Particles';
+import { useNavigate } from 'react-router-dom';
+import { useAnalysis } from './AnalysisContext';
 
 const Homepage = () => {
+    const navigate = useNavigate();
+    const { setAnalysisResults, setAnalysisType } = useAnalysis();
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
     const [fileType, setFileType] = useState('');
     const [fileCategory, setFileCategory] = useState('');
     const [uploading, setUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState('');
+    const [statusMessage, setStatusMessage] = useState('');
+    const [textInput, setTextInput] = useState('');
+    const [inputMode, setInputMode] = useState('text'); 
+    const [textBoxWidth, setTextBoxWidth] = useState(500);
+    const [textBoxHeight, setTextBoxHeight] = useState(56);
 
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
+            setTextInput('');
+            setInputMode('file');
+            
             const extension = file.name.split('.').pop().toUpperCase();
             setFileType(extension);
             
@@ -26,10 +37,21 @@ const Homepage = () => {
                     setPreviewUrl(reader.result);
                 };
                 reader.readAsDataURL(file);
-            } else if (file.type.startsWith('audio/') || extension === 'WAV') {
+            } else if (file.type.startsWith('audio/') || extension === 'WAV' || extension === 'MP3') {
                 setSelectedFile(file);
                 setFileCategory('audio');
                 setPreviewUrl(null); 
+            } else if (file.type === 'text/plain' || extension === 'TXT') {
+                // Read text file content
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result;
+                    navigate('/display3', { state: { text: content } });
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Unsupported file type. Please upload an image, audio (WAV/MP3), or text file.');
+                event.target.value = '';
             }
         }
     };
@@ -40,6 +62,9 @@ const Homepage = () => {
         setPreviewUrl(null);
         setFileType('');
         setFileCategory('');
+        setInputMode('text');
+        setTextBoxWidth(500);
+        setTextBoxHeight(56);
         document.getElementById('fileInput').value = '';
     };
 
@@ -47,36 +72,69 @@ const Homepage = () => {
         document.getElementById('fileInput').click();
     };
 
-    const handleSubmit = async () => {
-        if (!selectedFile) {
-            alert('Please select a file first!');
-            return;
+    const handleTextChange = (e) => {
+        const text = e.target.value;
+        setTextInput(text);
+        
+        // Dynamic width expansion (x-axis first)
+        const minWidth = 500;
+        const maxWidth = 800;
+        const charWidth = 8; // approximate character width
+        const calculatedWidth = Math.min(maxWidth, Math.max(minWidth, text.length * charWidth + 80));
+        setTextBoxWidth(calculatedWidth);
+        
+        // Dynamic height expansion (y-axis after width maxed)
+        const minHeight = 56;
+        const maxHeight = 200;
+        if (calculatedWidth >= maxWidth) {
+            // Calculate height based on text overflow
+            const lineCount = Math.ceil((text.length * charWidth) / (maxWidth - 80));
+            const calculatedHeight = Math.min(maxHeight, Math.max(minHeight, lineCount * 30));
+            setTextBoxHeight(calculatedHeight);
+        } else {
+            setTextBoxHeight(minHeight);
         }
-
-        if (fileCategory !== 'image') {
-            alert('Only image files can be submitted at this time.');
-            return;
+        
+        if (text && selectedFile) {
+            setSelectedFile(null);
+            setPreviewUrl(null);
+            setFileType('');
+            setFileCategory('');
+            document.getElementById('fileInput').value = '';
         }
+        
+        setInputMode(text ? 'text' : 'text');
+    };
 
-        setUploading(true);
-        setUploadStatus('Uploading...');
-
-        try {
-            const result = await uploadFileToFirebase(selectedFile, fileCategory, fileType);
-            console.log('Upload result:', result);
-            setUploadStatus('Upload successful!');
+    const handleSubmit = () => {
+        console.log('handleSubmit called', { selectedFile, textInput: textInput.trim() });
+        
+        if (!selectedFile && !textInput.trim()) {
+            setUploadStatus('error');
+            setStatusMessage('Please select a file or enter text');
             setTimeout(() => {
                 setUploadStatus('');
+                setStatusMessage('');
             }, 3000);
+            return;
+        }
+
+        // Handle text input
+        if (textInput.trim() && !selectedFile) {
+            console.log('Navigating to display3 with text');
+            navigate('/display3', { state: { text: textInput } });
+            return;
+        }
+
+        // Handle file upload
+        if (selectedFile) {
+            console.log('Navigating to display with file:', selectedFile.name, 'category:', fileCategory);
             
-        } catch (error) {
-            console.error('Upload failed:', error);
-            setUploadStatus('Upload failed. Please try again.');
-            setTimeout(() => {
-                setUploadStatus('');
-            }, 3000);
-        } finally {
-            setUploading(false);
+            if (fileCategory === 'image') {
+                navigate('/display', { state: { file: selectedFile } });
+            } else if (fileCategory === 'audio') {
+                navigate('/display2', { state: { file: selectedFile } });
+            }
         }
     };
 
@@ -138,28 +196,45 @@ const Homepage = () => {
                 <input
                     type="file"
                     id="fileInput"
-                    accept="image/*,.wav,audio/wav"
+                    accept="image/*,.wav,audio/wav,.mp3,audio/mpeg,.txt,text/plain"
                     onChange={handleFileUpload}
                     style={{ display: 'none' }}
                 />
-                <button className="upload-main-button" onClick={triggerFileInput}>
-                    <div className="plus-circle">
-                        <span className="plus-icon">+</span>
-                    </div>
-                    <span className="upload-text">Add a file</span>
+                <button 
+                    className="plus-button" 
+                    onClick={triggerFileInput}
+                    disabled={uploading}
+                    title="Upload file"
+                >
+                    <span className="plus-icon">+</span>
                 </button>
+                <textarea
+                    className="text-input-box"
+                    placeholder="Enter text here..."
+                    value={textInput}
+                    onChange={handleTextChange}
+                    disabled={uploading || selectedFile !== null}
+                    rows="1"
+                    style={{ 
+                        width: `${textBoxWidth}px`, 
+                        height: `${textBoxHeight}px`,
+                        transition: 'width 0.3s ease, height 0.3s ease'
+                    }}
+                />
                 <button 
                     className="arrow-button" 
                     onClick={handleSubmit}
-                    disabled={!selectedFile || uploading}
-                    style={{ opacity: !selectedFile || uploading ? 0.5 : 1 }}
+                    disabled={(!selectedFile && !textInput.trim()) || uploading}
+                    style={{ opacity: (!selectedFile && !textInput.trim()) || uploading ? 0.5 : 1 }}
                 >
                     <span className="arrow-icon">{uploading ? '⏳' : '→'}</span>
                 </button>
             </div>
             
-            {uploadStatus && (
-                <div className="upload-status">{uploadStatus}</div>
+            {statusMessage && (
+                <div className={`upload-status ${uploadStatus}`}>
+                    {statusMessage}
+                </div>
             )}
         </div>
     );

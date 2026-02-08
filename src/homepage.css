@@ -157,6 +157,78 @@
     max-width: 90vw;
 }
 
+.plus-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 140, 0, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.plus-button:hover {
+    background-color: rgba(255, 140, 0, 0.1);
+    border-color: rgba(255, 140, 0, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(255, 140, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.plus-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.plus-icon {
+    font-size: 24px;
+    font-weight: 300;
+    color: #ff8c00;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-input-box {
+    padding: 16px 24px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 140, 0, 0.4);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    resize: none;
+    outline: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    font-family: inherit;
+    overflow-y: auto;
+}
+
+.text-input-box::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.text-input-box:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 140, 0, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(255, 140, 0, 0.2);
+}
+
+.text-input-box:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .upload-main-button {
     display: flex;
     align-items: center;
@@ -211,17 +283,6 @@
 .upload-bar.has-preview .upload-main-button:hover .plus-circle {
     width: 40px;
     height: 40px;
-}
-
-.plus-icon {
-    font-size: 24px;
-    font-weight: 300;
-    color: #ff8c00;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
 }
 
 .upload-main-button:hover .plus-icon {

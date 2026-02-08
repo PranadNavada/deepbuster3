@@ -1,4 +1,4 @@
-.display-container {
+.display2-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,7 +63,7 @@
     justify-content: center;
 }
 
-.display-content {
+.display2-content {
     display: flex;
     gap: 10px;
     padding: 120px 20px 20px 20px;
@@ -105,7 +105,7 @@
     flex-direction: column;
 }
 
-.image-box {
+.spectrogram-box {
     height: 100%;
 }
 
@@ -115,20 +115,6 @@
 
 .description-box {
     flex: 1;
-}
-
-.percentage-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.005);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
-    width: 180px;
 }
 
 .section-title {
@@ -149,8 +135,21 @@
     border-radius: 8px;
 }
 
-.display-image,
-.heatmap-image {
+.percentage-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.005);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    width: 180px;
+}
+
+.content-image {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -195,41 +194,43 @@
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {
-    .display-content {
+    .top-section {
         flex-direction: column;
-        height: auto;
-        min-height: calc(100vh - 140px);
     }
 
-    .left-section {
-        height: 500px;
+    .right-panel {
+        width: 100%;
+        flex-direction: row;
     }
 
-    .right-section {
-        flex: none;
+    .heatmap-section {
+        flex: 1;
     }
 
-    .top-right {
-        height: 300px;
+    .percentage-box {
+        width: 200px;
     }
 }
 
 @media (max-width: 768px) {
-    .display-content {
+    .display2-content {
         padding: 120px 20px 40px 20px;
         gap: 20px;
     }
 
-    .top-right {
+    .right-panel {
         flex-direction: column;
-        height: auto;
     }
 
     .percentage-box {
         width: 100%;
     }
 
-    .section-title {
+    .main-title {
+        font-size: 48px;
+    }
+
+    .small-title {
         font-size: 22px;
     }
 
